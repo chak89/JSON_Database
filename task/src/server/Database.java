@@ -1,61 +1,45 @@
 package server;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Database {
-    String[] storage;
+    Map<String, String> jsonStorage;
+    JsonObjectResponse jsonObjectResponse;
 
     public Database() {
-        this.storage  = new String[1000];
-        Arrays.fill(storage,"");
+        this.jsonStorage = new HashMap<>();
     }
 
-    public String[] getStorage() {
-        return storage;
+    public JsonObjectResponse getJsonObjectResponse() {
+        return jsonObjectResponse;
     }
 
-    public void setStorage(String[] storage) {
-        this.storage = storage;
-    }
-
-    public String setCell(int index, String data) {
-        if (!isIndexInRange(index)) {
-            return "ERROR";
-        }
-
-        storage[index - 1] = data;
-        return "OK";
+    public void setCell(String key, String value) {
+        this.jsonStorage.put(key, value);
+        this.jsonObjectResponse = new JsonObjectResponse("OK", null, null);
     }
 
 
-    public String getCell(int index){
-        if (!isIndexInRange(index)) {
-            return "ERROR";
+    public void getCell(String key) {
+        if (this.jsonStorage.containsKey(key)) {
+            this.jsonObjectResponse = new JsonObjectResponse("OK", null, this.jsonStorage.get(key));
+        } else {
+            this.jsonObjectResponse = new JsonObjectResponse("ERROR", "No such key", null);
         }
-
-        if (storage[index - 1].isEmpty()) {
-            return "ERROR";
-        }
-        return storage[index - 1];
     }
 
-    public String delCell(int index) {
-        if (!isIndexInRange(index)) {
-            return "ERROR";
+    public void delCell(String key) {
+        if (this.jsonStorage.containsKey(key)) {
+            this.jsonStorage.remove(key);
+            this.jsonObjectResponse = new JsonObjectResponse("OK", null, null);
+        } else {
+            this.jsonObjectResponse = new JsonObjectResponse("ERROR", "No such key", null);
         }
-
-        if (!storage[index - 1].isEmpty()) {
-            storage[index - 1] = "";
-        }
-        return "OK";
     }
 
-    public boolean isIndexInRange(int index) {
-
-        if (index < 1 || index > 100) {
-            return false;
-        }
-        return true;
+    public void exit(){
+        this.jsonObjectResponse = new JsonObjectResponse("OK", null, null);
     }
 }

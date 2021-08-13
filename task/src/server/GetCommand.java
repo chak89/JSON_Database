@@ -3,18 +3,18 @@ package server;
 public class GetCommand implements Command{
 
     Database database;
-    int index;
+    String key;
 
     public GetCommand(Database database) {
         this.database = database;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     @Override
-    public String execute() {
-        return this.database.getCell(this.index);
+    public void execute() {
+        this.database.getCell(this.key);
     }
 }

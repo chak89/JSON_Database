@@ -11,8 +11,8 @@ public class MainServer {
     private static final String SERVER_ADDRESS = "127.0.0.1";
     private static final int SERVER_PORT = 34522;
     private ServerSocket server;
-    private Database database;
-    private Controller controller;
+    private final Database database;
+    private final Controller controller;
     private String wloop;
 
     public MainServer(Database database, Controller controller) {
@@ -37,7 +37,9 @@ public class MainServer {
             ) {
                 String receivedMsg = input.readUTF(); // reading a message
 
-                String returnedData = receivedData(receivedMsg);
+                receivedData(receivedMsg);
+
+                String returnedData = this.database.getJsonObjectResponse().getSerializeJSON();
 
                 output.writeUTF(returnedData); // resend it to the client
 
@@ -51,31 +53,35 @@ public class MainServer {
         }
     }
 
-    private String receivedData(String receivedMsg) {
-        String[] split = receivedMsg.split(" ", 3);
+    private void receivedData(String receivedMsg) {
+        JsonObject jsonObject = new JsonObject(receivedMsg).getDeserialzeJSON();
 
-        switch (split[0]) {
+        switch (jsonObject.getType()) {
             case "get":
                 GetCommand getCommand = new GetCommand(this.database);
-                getCommand.setIndex(Integer.parseInt(split[1]));
+                getCommand.setKey(jsonObject.getKey());
                 this.controller.setCommand(getCommand);
-                return this.controller.executeCommand();
+                this.controller.executeCommand();
+                break;
             case "set":
                 SetCommand setCommand = new SetCommand(this.database);
-                setCommand.setIndex(Integer.parseInt(split[1]));
-                setCommand.setValue(split[2]);
+                setCommand.setKey(jsonObject.getKey());
+                setCommand.setValue(jsonObject.getValue());
                 this.controller.setCommand(setCommand);
-                return this.controller.executeCommand();
+                this.controller.executeCommand();
+                break;
             case "delete":
                 DeleteCommand deleteCommand = new DeleteCommand(this.database);
-                deleteCommand.setIndex(Integer.parseInt(split[1]));
+                deleteCommand.setKey(jsonObject.getKey());
                 this.controller.setCommand(deleteCommand);
-                return this.controller.executeCommand();
+                this.controller.executeCommand();
+                break;
             case "exit":
                 this.wloop = "exit";
-                return "OK";
+                ExitCommand exitCommand = new ExitCommand(this.database);
+                this.controller.setCommand(exitCommand);
+                this.controller.executeCommand();
+                break;
         }
-        return "";
     }
-
 }

@@ -1,5 +1,6 @@
 package client;
 
+import server.JsonObject;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -32,10 +33,7 @@ public class MainClient {
                 DataOutputStream output = new DataOutputStream(socket.getOutputStream());
         ) {
 
-            String msg = (argsCmd.getType() + " "
-                    + argsCmd.getCellInx() + " "
-                    + argsCmd.getStringValue()).trim();
-
+            String msg = serializeToJSON();
             output.writeUTF(msg);
             System.out.println("Sent: " + msg);
 
@@ -51,11 +49,8 @@ public class MainClient {
         this.argsCmd = argsCmd;
     }
 
-    public void sendData() {
-
-    }
-
-    public void receiveData() {
-
+    public String serializeToJSON() {
+        JsonObject jsonObject = new JsonObject(argsCmd.getType(), argsCmd.getKey(), argsCmd.getStringValue());
+        return jsonObject.getSerializeJSON();
     }
 }

@@ -2,9 +2,6 @@ package client;
 
 import com.beust.jcommander.Parameter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ArgsCmd {
     @Parameter(
             names = "-t",
@@ -14,15 +11,15 @@ public class ArgsCmd {
     private String type;
 
     @Parameter(
-            names = "-i",
-            description = "Index of the cell",
+            names = "-k",
+            description = "The key",
             required = false
     )
-    private Integer cellInx;
+    private String key;
 
 
     @Parameter(
-            names = "-m",
+            names = "-v",
             description = "Value to save in the database"
     )
     private String stringValue;
@@ -31,24 +28,23 @@ public class ArgsCmd {
         return type;
     }
 
-    public String getCellInx() {
-        if (cellInx == null) {
-            return "";
+    public String getKey() {
+        if (key == null) {
+            return null;
         }
-
-        return cellInx.toString();
+        return key.toString();
     }
 
     public String getStringValue() {
         if (stringValue == null) {
-            return "";
+            return null;
         }
         return stringValue;
     }
 
     public void printAll() {
         System.out.println("-t " + this.getType());
-        System.out.println("-i " + this.getCellInx());
+        System.out.println("-i " + this.getKey());
         System.out.println("-m " + this.getStringValue());
     }
 }

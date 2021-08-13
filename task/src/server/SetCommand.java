@@ -3,15 +3,15 @@ package server;
 public class SetCommand implements Command {
 
     Database database;
-    int index;
+    String key;
     String value;
 
     public SetCommand(Database database) {
         this.database = database;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public void setValue(String value) {
@@ -19,7 +19,7 @@ public class SetCommand implements Command {
     }
 
     @Override
-    public String execute() {
-        return this.database.setCell(this.index, this.value);
+    public void execute() {
+        this.database.setCell(this.key, this.value);
     }
 }

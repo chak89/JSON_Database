@@ -3,19 +3,18 @@ package server;
 public class DeleteCommand implements Command{
 
     Database database;
-    int index;
+    String key;
 
     public DeleteCommand(Database database) {
         this.database = database;
-        this.index = index;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     @Override
-    public String execute() {
-        return this.database.delCell(this.index);
+    public void execute() {
+        this.database.delCell(this.key);
     }
 }
