@@ -7,7 +7,7 @@ public class Database {
     String[] storage;
 
     public Database() {
-        this.storage  = new String[100];
+        this.storage  = new String[1000];
         Arrays.fill(storage,"");
     }
 
@@ -19,38 +19,41 @@ public class Database {
         this.storage = storage;
     }
 
-    public void setCell(int index, String data) {
-        if (!isIndexInRange(index)) {return;}
+    public String setCell(int index, String data) {
+        if (!isIndexInRange(index)) {
+            return "ERROR";
+        }
 
         storage[index - 1] = data;
-        System.out.println("OK");
+        return "OK";
     }
 
 
-    public void getCell(int index){
-
-        if (!isIndexInRange(index)) {return;}
+    public String getCell(int index){
+        if (!isIndexInRange(index)) {
+            return "ERROR";
+        }
 
         if (storage[index - 1].isEmpty()) {
-            System.out.println("ERROR");
-            return;
+            return "ERROR";
         }
-        System.out.println(storage[index - 1]);
+        return storage[index - 1];
     }
 
-    public void delCell(int index) {
-        if (!isIndexInRange(index)) {return;}
+    public String delCell(int index) {
+        if (!isIndexInRange(index)) {
+            return "ERROR";
+        }
 
         if (!storage[index - 1].isEmpty()) {
             storage[index - 1] = "";
         }
-        System.out.println("OK");
+        return "OK";
     }
 
     public boolean isIndexInRange(int index) {
 
         if (index < 1 || index > 100) {
-            System.out.println("ERROR");
             return false;
         }
         return true;

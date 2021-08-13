@@ -1,11 +1,13 @@
 package server;
 
-import java.util.Scanner;
+import javax.xml.crypto.Data;
 
 public class Main {
 
     public static void main(String[] args) {
-        MainServer mainServer = new MainServer();
+        Database database = new Database();
+        Controller controller = new Controller();
+        MainServer mainServer = new MainServer(database,controller);
         mainServer.startServer();
     }
 }
