@@ -1,6 +1,7 @@
 package client;
 
 import com.beust.jcommander.JCommander;
+import server.JsonObject;
 
 public class Main {
 
@@ -11,8 +12,7 @@ public class Main {
                 .build();
         jCmd.parse(args);
 
-          MainClient mainClient = new MainClient();
-          mainClient.startUp(argsCmd);
-
+        MainClient mainClient = new MainClient();
+        mainClient.startUp(argsCmd);
     }
 }

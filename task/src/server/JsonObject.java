@@ -2,6 +2,8 @@ package server;
 
 import com.google.gson.Gson;
 
+import java.io.Serializable;
+
 public class JsonObject {
     private String type;
     private String key;

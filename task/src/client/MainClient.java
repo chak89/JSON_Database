@@ -33,7 +33,16 @@ public class MainClient {
                 DataOutputStream output = new DataOutputStream(socket.getOutputStream());
         ) {
 
-            String msg = serializeToJSON();
+            String msg = null;
+
+            if(argsCmd.getFilename() != null) {
+                ReadDataFromFile file1 = new ReadDataFromFile(argsCmd.getFilename());
+                file1.readDataToString();
+                msg = file1.getData();
+            } else {
+                msg = serializeToJSON();
+            }
+
             output.writeUTF(msg);
             System.out.println("Sent: " + msg);
 
