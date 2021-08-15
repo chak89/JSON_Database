@@ -1,20 +1,24 @@
-package server;
+package server.commands;
+
+import com.google.gson.JsonElement;
+import server.Command;
+import server.Database;
 
 public class SetCommand implements Command {
 
     Database database;
-    String key;
-    String value;
+    JsonElement key;
+    JsonElement value;
 
     public SetCommand(Database database) {
         this.database = database;
     }
 
-    public void setKey(String key) {
+    public void setKey(JsonElement key) {
         this.key = key;
     }
 
-    public void setValue(String value) {
+    public void setValue(JsonElement value) {
         this.value = value;
     }
 

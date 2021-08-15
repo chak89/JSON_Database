@@ -1,15 +1,19 @@
-package server;
+package server.commands;
 
-public class DeleteCommand implements Command{
+import com.google.gson.JsonElement;
+import server.Command;
+import server.Database;
+
+public class DeleteCommand implements Command {
 
     Database database;
-    String key;
+    JsonElement key;
 
     public DeleteCommand(Database database) {
         this.database = database;
     }
 
-    public void setKey(String key) {
+    public void setKey(JsonElement key) {
         this.key = key;
     }
 

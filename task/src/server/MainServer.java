@@ -1,15 +1,14 @@
 package server;
 
+import server.commands.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class MainServer {
     private static final String SERVER_ADDRESS = "127.0.0.1";
@@ -42,9 +41,10 @@ public class MainServer {
                     try (DataInputStream input = new DataInputStream(socket.getInputStream());
                          DataOutputStream output = new DataOutputStream(socket.getOutputStream())
                     ) {
+
                         String receivedMsg = input.readUTF(); // reading a message
                         receivedData(receivedMsg);
-                        String returnedData = dataToSend();
+                        String returnedData = convertToJsonString();
                         output.writeUTF(returnedData); // resend it to the client
 
                         if (this.wloop.equals("exit")) {
@@ -57,35 +57,34 @@ public class MainServer {
                 });
 
             }
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
     }
 
-
-    private String dataToSend() {
+    private String convertToJsonString() {
         return this.database.getJsonObjectResponse().getSerializeJSON();
     }
 
     private void receivedData(String receivedMsg) {
-        JsonObject jsonObject = new JsonObject(receivedMsg).getDeserialzeJSON();
+        ReceivedJsonObject receivedJsonObject = new ReceivedJsonObject(receivedMsg).getDeserializeJSON();
 
-        switch (jsonObject.getType()) {
+        switch (receivedJsonObject.getType()) {
             case "get":
                 GetCommand getCommand = new GetCommand(this.database);
-                getCommand.setKey(jsonObject.getKey());
+                getCommand.setKey(receivedJsonObject.getKey());
                 this.controller.setCommand(getCommand);
                 this.controller.executeCommand();
                 break;
             case "set":
                 SetCommand setCommand = new SetCommand(this.database);
-                setCommand.setKey(jsonObject.getKey());
-                setCommand.setValue(jsonObject.getValue());
+                setCommand.setKey(receivedJsonObject.getKey());
+                setCommand.setValue(receivedJsonObject.getValue());
                 this.controller.setCommand(setCommand);
                 this.controller.executeCommand();
                 break;
             case "delete":
                 DeleteCommand deleteCommand = new DeleteCommand(this.database);
-                deleteCommand.setKey(jsonObject.getKey());
+                deleteCommand.setKey(receivedJsonObject.getKey());
                 this.controller.setCommand(deleteCommand);
                 this.controller.executeCommand();
                 break;

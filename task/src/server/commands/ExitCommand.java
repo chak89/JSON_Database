@@ -1,6 +1,9 @@
-package server;
+package server.commands;
 
-public class ExitCommand implements Command{
+import server.Command;
+import server.Database;
+
+public class ExitCommand implements Command {
 
     Database database;
 

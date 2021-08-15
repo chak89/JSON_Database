@@ -1,6 +1,5 @@
 package client;
 
-import server.JsonObject;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -30,25 +29,13 @@ public class MainClient {
         System.out.println("Client started!");
         try (
                 DataInputStream input = new DataInputStream(socket.getInputStream());
-                DataOutputStream output = new DataOutputStream(socket.getOutputStream());
+                DataOutputStream output = new DataOutputStream(socket.getOutputStream())
         ) {
-
-            String msg = null;
-
-            if(argsCmd.getFilename() != null) {
-                ReadDataFromFile file1 = new ReadDataFromFile(argsCmd.getFilename());
-                file1.readDataToString();
-                msg = file1.getData();
-            } else {
-                msg = serializeToJSON();
-            }
-
+            String msg = argsCmd.convertToJson();
             output.writeUTF(msg);
             System.out.println("Sent: " + msg);
-
             String receivedMsg = input.readUTF();
             System.out.println("Received: " + receivedMsg);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,10 +43,5 @@ public class MainClient {
 
     public void processArgs(ArgsCmd argsCmd) {
         this.argsCmd = argsCmd;
-    }
-
-    public String serializeToJSON() {
-        JsonObject jsonObject = new JsonObject(argsCmd.getType(), argsCmd.getKey(), argsCmd.getStringValue());
-        return jsonObject.getSerializeJSON();
     }
 }

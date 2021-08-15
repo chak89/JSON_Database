@@ -1,15 +1,19 @@
-package server;
+package server.commands;
 
-public class GetCommand implements Command{
+import com.google.gson.JsonElement;
+import server.Command;
+import server.Database;
+
+public class GetCommand implements Command {
 
     Database database;
-    String key;
+    JsonElement key;
 
     public GetCommand(Database database) {
         this.database = database;
     }
 
-    public void setKey(String key) {
+    public void setKey(JsonElement key) {
         this.key = key;
     }
 

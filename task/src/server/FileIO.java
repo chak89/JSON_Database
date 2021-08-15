@@ -2,19 +2,17 @@ package server;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
+import com.google.gson.JsonObject;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+
 
 public class FileIO {
     File file;
-    private final Map<String, String> jsonObject;
+    private final JsonObject jsonObject;
 
-    public FileIO(String fileName, Map<String, String> jsonObject) {
-        //System.getProperty("user.dir") + "/src/server/data/db.json"
+    public FileIO(String fileName, JsonObject jsonObject) {
         String path = System.getProperty("user.dir") + "/src/server/data/";
         //String path = "JSON Database/task/src/server/data/";
         String pathToFile = path + fileName;
@@ -33,7 +31,7 @@ public class FileIO {
         }
     }
 
-    public HashMap<String, String> readJSONFromFile() {
+    public JsonObject readJSONFromFile() {
 
         // create Gson instance
         Gson gson = new Gson();
@@ -42,9 +40,9 @@ public class FileIO {
         try (Reader reader = Files.newBufferedReader(Path.of(file.getAbsolutePath()))) {
 
             // convert JSON file to map
-            return gson.fromJson(reader, HashMap.class);
+            return gson.fromJson(reader, JsonObject.class);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

@@ -1,6 +1,7 @@
 package client;
 
 import com.beust.jcommander.Parameter;
+import com.google.gson.Gson;
 
 public class ArgsCmd {
     @Parameter(
@@ -25,7 +26,8 @@ public class ArgsCmd {
             names = "-v",
             description = "Value to save in the database"
     )
-    private String stringValue;
+    private String value;
+
 
     public String getFilename() {
         if (filename == null) {
@@ -45,16 +47,27 @@ public class ArgsCmd {
         return key.toString();
     }
 
-    public String getStringValue() {
-        if (stringValue == null) {
+    public String getValue() {
+        if (value == null) {
             return null;
         }
-        return stringValue;
+        return value;
+    }
+
+    public String convertToJson() {
+        if (this.filename != null) {
+            ReadDataFromFile file1 = new ReadDataFromFile(getFilename());
+            file1.readDataToString();
+            return file1.getData();
+        }
+
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 
     public void printAll() {
         System.out.println("-t " + this.getType());
         System.out.println("-i " + this.getKey());
-        System.out.println("-m " + this.getStringValue());
+        System.out.println("-m " + this.getValue());
     }
 }

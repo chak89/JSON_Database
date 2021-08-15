@@ -1,7 +1,6 @@
 package client;
 
 import com.beust.jcommander.JCommander;
-import server.JsonObject;
 
 public class Main {
 
